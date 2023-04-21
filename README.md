@@ -20,6 +20,8 @@ mysql
 sudo apt install mysql-server
 sudo apt-get install mysql-server
 sudo apt-get install libmysqlclient-dev
+mysql -u root -p
+source ./thirdparty/chat.sql;
 ```
 
 [nginx 1.12.2](http://nginx.org/en/download.html) 
