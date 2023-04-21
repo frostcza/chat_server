@@ -66,6 +66,14 @@ sudo ./nginx
 [redis 4.0.9](https://redis.io/download/#redis-downloads) && [guide](https://blog.csdn.net/m0_61491995/article/details/125906242)
 ```bash
 sudo apt-get install redis-server
+mkdir /etc/redis
+cd /etc/redis
+sudo cp /usr/local/redis/redis.conf .
+sudo gedit redis.conf
+
+# find "daemonize no"
+# change it into "daemonize yes"
+
 redis-server /etc/redis/redis.conf
 ```
 [hiredis](https://github.com/redis/hiredis)
@@ -89,7 +97,7 @@ cd build
 cmake ..
 make
 
-# make sure nginx and redis  are running
+# make sure nginx and redis are running
 sudo ./nginx
 redis-server /etc/redis/redis.conf
 
