@@ -1,11 +1,14 @@
 # 基于muduo网络库的集群服务器项目 #
 
 基于muduo网络库的集群服务器，可以实现跨服务器的聊天功能  
+支持接入chatGPT/Claude/Sage和机器人对话
 
-1. muduo网络库的ThreadPool Reactor  
-2. mysql  
-3. nginx配置tcp负载均衡
-4. redis实现服务器间通信
+1. 基于muduo网络库的ThreadPool Reactor  
+2. 基于json序列化与反序列化的消息收发协议
+3. 基于mysql设计聊天服务器的数据库  
+4. 基于nginx实现tcp负载均衡
+5. 基于redis实现服务器间通信
+6. 基于Quora's Poe逆向工程，在本机搭建robot server，实现用户与机器人的对话
 
 ## Enviornment ##
 
@@ -67,19 +70,37 @@ sudo make install
 sudo ldconfig /usr/local/lib
 ```
 
+[poe-api](https://github.com/ading2210/poe-api)
+```bash
+pip install poe-api
+```
+
 ## run ##
 ```bash
+# make the project
 cd chat_server
 mkdir build
 cd build
 cmake ..
 make
+
+# start the chat servers
 cd ../bin
 ./server 127.0.0.1 6000
-
 # new terminal
 ./server 127.0.0.1 6002
 
+# start chat robot server
+cd ../python
+python botserver.py
+
+# start clients
+cd ../bin
+./client 127.0.0.1 8000
 # new terminal
 ./client 127.0.0.1 8000
 ```
+
+<image src="imgs/demo1.png">
+<image src="imgs/demo2.png">
+<image src="imgs/demo3.png">

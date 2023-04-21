@@ -63,6 +63,7 @@ int main(int argc, char ** argv)
 
     sockaddr_in server;
     memset(&server, 0, sizeof(sockaddr_in));
+    server.sin_addr.s_addr = inet_addr(ip);
     server.sin_family = AF_INET;
     server.sin_port = htons(port);
 
@@ -353,6 +354,7 @@ void addfriend(int, string);
 void creategroup(int, string);
 void addgroup(int, string);
 void groupchat(int, string);
+void robot(int, string);
 void logout(int, string);
 
 //系统支持的客户端命令列表
@@ -364,6 +366,7 @@ unordered_map<string, string> commandMap =
     {"creategroup", "创建群组, 格式creategroup:groupname:groupdesc"},
     {"addgroup", "加入群组, 格式addgroup:groupid"},
     {"groupchat", "群聊,格式groupchat:groupid:message"},
+    {"robot", "与机器人聊天,格式robot:message"},
     {"logout", "注销, 格式logout"}
 };
 
@@ -376,6 +379,7 @@ unordered_map<string, function<void(int, string)>> commandHandlerMap =
     {"creategroup", creategroup},
     {"addgroup", addgroup},
     {"groupchat", groupchat},
+    {"robot", robot},
     {"logout", logout}
 };
 
@@ -383,7 +387,7 @@ unordered_map<string, function<void(int, string)>> commandHandlerMap =
 void mainMenu(int clientfd)
 {
     help();
-    char buffer[4096] = {0};
+    char buffer[1024] = {0};
     while(mainMenuRunning)
     {
         cout << "write command: " << endl;
@@ -403,6 +407,7 @@ void mainMenu(int clientfd)
         if(iter == commandHandlerMap.end())
         {
             cerr << "invalid command" << endl;
+            cin.clear();
             continue;
         }
         iter->second(clientfd, commandbuf.substr(index+1, commandbuf.size()-index));
@@ -540,6 +545,38 @@ void groupchat(int clientfd, string s)
     {
         cerr << "send group-chat msg failed" << endl;
     }
+}
+
+// message
+void robot(int clientfd, string s)
+{
+    // connect robot server
+    int robotfd = socket(AF_INET, SOCK_STREAM, 0);
+    if(-1 == robotfd)
+    {
+        cerr << "robot socket create failed" <<endl;
+    }
+    sockaddr_in robot_server;
+    memset(&robot_server, 0, sizeof(sockaddr_in));
+    robot_server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    robot_server.sin_family = AF_INET;
+    robot_server.sin_port = htons(8888);
+    if(-1 == connect(robotfd, (sockaddr*)&robot_server, sizeof(sockaddr_in)))
+    {
+        cerr << "connect robot server error" << endl;
+        close(robotfd);
+        exit(-1);
+    }
+
+    int len = send(robotfd, s.c_str(), strlen(s.c_str())+1, 0);
+    if(-1 == len)
+    {
+        cerr << "send robot-chat msg failed" << endl;
+    }
+
+    char answer[4096] = {0};
+    recv(robotfd, answer, 4096, 0);
+    cout << answer << endl;
 }
 
 void logout(int clientfd, string s)
