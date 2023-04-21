@@ -4,11 +4,11 @@
 支持接入chatGPT/Claude/Sage和机器人对话
 
 1. 基于muduo网络库的ThreadPool Reactor  
-2. 基于json序列化与反序列化的消息收发协议
+2. 基于json序列化与反序列化的消息收发协议  
 3. 基于mysql设计聊天服务器的数据库  
-4. 基于nginx实现tcp负载均衡
-5. 基于redis实现服务器间通信
-6. 基于Quora's Poe逆向工程，在本机搭建robot server，实现用户与机器人的对话
+4. 基于nginx实现tcp负载均衡  
+5. 基于redis实现服务器间通信  
+6. 基于Quora's Poe逆向工程，向POE发送HTTP请求，实现用户与机器人的对话  
 
 ## Enviornment ##
 
