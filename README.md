@@ -24,6 +24,9 @@ sudo apt install mysql-server
 sudo apt-get install mysql-server
 sudo apt-get install libmysqlclient-dev
 mysql -u root -p
+set character_set_server=utf8;
+create database chat;
+use chat;
 source ./thirdparty/chat.sql;
 ```
 
